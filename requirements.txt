@@ -1,2 +1,4 @@
 ta-lib
 tushare
+pandas
+numpy
