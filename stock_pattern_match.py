@@ -141,5 +141,6 @@ def main():
             if(prices is not None):
                 prices = prices>np.mean(prices)
                 volumes = volumes>np.mean(volumes)
+
 if __name__=="__main__":
     main()
