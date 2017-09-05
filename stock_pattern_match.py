@@ -12,6 +12,23 @@ DAY_PRICE_AVARAGES = (5,10,30,60,90) #取哪些日价格均线
 DAY_VOLUME_AVARAGES = (5,90) #取哪些日成交量均线
 WEEK_PRICE_AVARAGES = () #取哪些周均线
 WEEK_VOLUME_AVARAGES = ()
+def _datelist(start, end, str=False):
+    start_date = date(*start)
+    end_date = date(*end)
+
+    result = []
+    curr_date = start_date
+    while curr_date != end_date:
+        if(str):
+            result.append("%04d%02d%02d" % (curr_date.year, curr_date.month, curr_date.day))
+        else:
+            result.append(curr_date)
+        curr_date += timedelta(1)
+    if(str):
+        result.append("%04d%02d%02d" % (curr_date.year, curr_date.month, curr_date.day))
+    else:
+        result.append(curr_date)
+    return result
 
 def _date_to_str(date_python):#
     return date_python.strftime('%Y-%m-%d')
@@ -116,9 +133,13 @@ def _compte_hash():
     pass
 def main():
     #按照日期和code取数据
-    one_code = "600050"
-    one_date = date(year=2017,month=8,day=25)
-    _get_price_and_volume_ts(one_code,one_date)
-
+    hs300s = ts.get_sme_classified()
+    date_list = _datelist((2014,1,1),(2017,1,1))
+    for one_code in hs300s['code']:
+        for one_date in date_list:
+            prices,volumes = _get_price_and_volume_ts(one_code,one_date)
+            if(prices is not None):
+                prices = prices>np.mean(prices)
+                volumes = volumes>np.mean(volumes)
 if __name__=="__main__":
     main()
